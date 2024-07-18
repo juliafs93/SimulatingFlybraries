@@ -115,7 +115,7 @@ def SimulationFunc(gennum,cell_num,ProbBind,ProbMut, gRNAFile, GFPseqF_original,
 
 
 def PlotFunct(cell_num,fullpath,Mutation_matrix,mutation_limit,ProbMut,ProbBind,gRNAsDF,gennum,gfplist,GFPseqF_original,cfig,ax,cfig2,ax2,figurehistogram,axhist,figureplot,axplot,MutIndex,BindIndex,gRNAFile,dfAvMut):
-    PlotIndex = MutIndex*3 + BindIndex
+    PlotIndex = MutIndex + BindIndex
     now = datetime.now() #initial variable for time sys
     current_time = now.strftime("%H--%M--%S.%f"+"_" + "%m-%d-%Y") #time format: Hour--Minute--Second and femtosecond_month-day-year
     cfig.tight_layout()
@@ -198,6 +198,9 @@ def PlotFunct(cell_num,fullpath,Mutation_matrix,mutation_limit,ProbMut,ProbBind,
     starlisterG.sort()
     Cs = Counter(starlisterC)
     Gs = Counter(starlisterG)
+    
+    starlisterdictionaryC = {}
+    starlisterdictionaryG = {}
 
     newcount=0
     while len(starlisterC)>newcount:
@@ -206,6 +209,7 @@ def PlotFunct(cell_num,fullpath,Mutation_matrix,mutation_limit,ProbMut,ProbBind,
         else:
              starlisterdictionaryC.update({ starlisterC[newcount]: Cs[ starlisterC[newcount]]/cell_num*100})
         newcount=newcount+1
+        
 
     newcount=0
     while len(starlisterG)>newcount:
