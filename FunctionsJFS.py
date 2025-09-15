@@ -65,8 +65,12 @@ def SimulationFunc(gennum,cell_num,ProbBind,ProbMut, gRNAFile, GFPseqF_original,
                 Start = row['Start']-Shift
                 End = row['End']-Shift
                 Orientation = row['Orientation']
-                if Orientation=='+': gRNAseq = GFPseqF[Start-1:End] #Forward
-                if Orientation=='-': gRNAseq = GFPseqR[Start-1:End] #Reversed
+                if Orientation=='+': 
+                    gRNAseq = GFPseqF[Start-1:End] #Forward
+                    UniformityNew = Uniformity
+                if Orientation=='-': 
+                    gRNAseq = GFPseqR[Start-1:End] #Reversed
+                    UniformityNew = Uniformity[::-1]
                 gRNAseqList = list(gRNAseq)
                 mutation_counter=[]
                 mutation_counter.extend([i for i,x in enumerate(gRNAseqList) if x == '*']) #adds (in the nonmath sense) function output to mutation counter
@@ -74,16 +78,18 @@ def SimulationFunc(gennum,cell_num,ProbBind,ProbMut, gRNAFile, GFPseqF_original,
             # PROBABILITY OF Cas9 BINDING
                 x=0
                 if ProbBind > random.random() and len(mutation_counter) == 0:
-                    
+#                     if len(gRNAseqList != len(Uniformity):
+                           
                     while x < len(gRNAseqList): 
                         # PROBABILITY OF AID MUTATING C
-                        if Orientation == '-':
-                            AdditionalProb = Uniformity[max(-x,-len(Uniformity)+1)]
-                        else:
-                            AdditionalProb = Uniformity[min(x,len(Uniformity)-1)]
+#                         if Orientation == '-':
+#                             AdditionalProb = Uniformity[max(-x,-len(Uniformity)+1)]
+#                         else:
+#                             AdditionalProb = Uniformity[min(x,len(Uniformity)-1)]
+                        AdditionalProb = UniformityNew[x]
                         if Orientation == '+' and gRNAseqList[x]=="c" and random.random()<ProbMut*AdditionalProb:
                             gRNAseqList[x]='*'
-                        if gRNAseqList[x]=="g" and random.random()<ProbMut*AdditionalProb and Orientation == '-':
+                        if Orientation == '-' and gRNAseqList[x]=="g" and random.random()<ProbMut*AdditionalProb:
                             gRNAseqList[x]='*'
                         x=x+1
                     if Orientation=='+': GFPseqF = GFPseqF.replace(gRNAseq,''.join(gRNAseqList))
